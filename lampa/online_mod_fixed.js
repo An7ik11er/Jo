@@ -137,7 +137,7 @@
     }
 
     function baseUserAgent() {
-      return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36';
+      return 'Mozilla/5.0 (Linux; Android 12; BRAVIA 4K VH2 Build/SQ1D.220205.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36';
     }
 
     function vcdnToken() {
@@ -196,6 +196,10 @@
       var user_proxy1 = (proxy_other_url || proxy1) + param_ip;
       var user_proxy2 = (proxy_other_url || proxy2) + param_ip;
       var user_proxy3 = (proxy_other_url || proxy3) + param_ip;
+      if (!proxy_secret) {
+        proxy_secret = user_proxy2;
+        proxy_secret_ip = user_proxy2;
+      }
       if (name === 'lumex_api') return user_proxy2;
       if (name === 'filmix_site') return proxy_other && !proxy_other_url && proxy_secret_ip || user_proxy1;
       if (name === 'filmix_abuse') return '';
@@ -13948,7 +13952,7 @@
     var disable_dbg = !Utils.isDebug();
     var isAndroid = Lampa.Platform.is('android');
     isAndroid && Utils.checkAndroidVersion(339);
-    var collapsBlocked = (!startsWith(window.location.protocol, 'http') || window.location.hostname.indexOf('lampa') !== -1) && disable_dbg;
+    var collapsBlocked = false;
     var Balancers = [{
       name: 'lumex',
       title: 'Lumex',
@@ -13957,7 +13961,7 @@
       search: false,
       kp: false,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'lumex2',
       title: 'Lumex (Ads)',
@@ -13966,7 +13970,7 @@
       search: false,
       kp: false,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'rezka2',
       title: 'HDrezka',
@@ -13984,7 +13988,7 @@
       search: true,
       kp: false,
       imdb: false,
-      disabled: true
+      disabled: false
     }, {
       name: 'collaps',
       title: 'Collaps',
@@ -13993,7 +13997,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: collapsBlocked
+      disabled: false
     }, {
       name: 'collaps-dash',
       title: 'Collaps (DASH)',
@@ -14004,7 +14008,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: collapsBlocked
+      disabled: false
     }, {
       name: 'cdnmovies',
       title: 'CDNMovies',
@@ -14013,7 +14017,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'filmix',
       title: 'Filmix',
@@ -14031,7 +14035,7 @@
       search: false,
       kp: true,
       imdb: false,
-      disabled: true
+      disabled: false
     }, {
       name: 'fancdn',
       title: 'FanCDN',
@@ -14040,7 +14044,7 @@
       search: true,
       kp: false,
       imdb: false,
-      disabled: disable_dbg
+      disabled: false
     }, {
       name: 'fancdn2',
       title: 'FanCDN (ID)',
@@ -14049,7 +14053,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'fanserials',
       title: 'FanSerials',
@@ -14058,7 +14062,7 @@
       search: false,
       kp: true,
       imdb: false,
-      disabled: disable_dbg && !isAndroid
+      disabled: false
     }, {
       name: 'videoseed',
       title: 'VideoSeed',
@@ -14067,7 +14071,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'vibix',
       title: 'Vibix',
@@ -14076,7 +14080,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'redheadsound',
       title: 'RedHeadSound',
@@ -14085,7 +14089,7 @@
       search: true,
       kp: false,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'redheadsound-dash',
       title: 'RedHeadSound (DASH)',
@@ -14096,7 +14100,7 @@
       search: true,
       kp: false,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'cdnvideohub',
       title: 'CDNVideoHub',
@@ -14114,7 +14118,7 @@
       search: true,
       kp: false,
       imdb: false,
-      disabled: true
+      disabled: false
     }, {
       name: 'anilibria2',
       title: 'AniLibria.top',
@@ -14132,7 +14136,7 @@
       search: true,
       kp: false,
       imdb: false,
-      disabled: true
+      disabled: false
     }, {
       name: 'kodik',
       title: 'Kodik',
@@ -14150,7 +14154,7 @@
       search: false,
       kp: true,
       imdb: true,
-      disabled: true
+      disabled: false
     }, {
       name: 'kinopub',
       title: 'KinoPub',
@@ -14159,7 +14163,7 @@
       search: true,
       kp: false,
       imdb: true,
-      disabled: true
+      disabled: false
     }];
 
     var proxyInitialized = {};
@@ -15493,17 +15497,17 @@
     }
 
     function initStorage() {
-      if (!Utils.isDebug()) {
-        Lampa.Storage.set('online_mod_proxy_lumex', 'false');
-        Lampa.Storage.set('online_mod_proxy_rezka2', 'false');
-        Lampa.Storage.set('online_mod_proxy_kinobase', 'false');
-        Lampa.Storage.set('online_mod_proxy_collaps', 'false');
-        Lampa.Storage.set('online_mod_proxy_cdnmovies', 'false');
-        Lampa.Storage.set('online_mod_proxy_fancdn', 'false');
-        Lampa.Storage.set('online_mod_proxy_fancdn2', 'false');
-        Lampa.Storage.set('online_mod_proxy_fanserials', 'false');
-        Lampa.Storage.set('online_mod_proxy_fanserials_cdn', 'false');
-        Lampa.Storage.set('online_mod_proxy_animelib', 'false');
+      if (!Lampa.Platform.is('android')) {
+        Lampa.Storage.set('online_mod_proxy_lumex', 'true');
+        Lampa.Storage.set('online_mod_proxy_rezka2', 'true');
+        Lampa.Storage.set('online_mod_proxy_kinobase', 'true');
+        Lampa.Storage.set('online_mod_proxy_collaps', 'true');
+        Lampa.Storage.set('online_mod_proxy_cdnmovies', 'true');
+        Lampa.Storage.set('online_mod_proxy_fancdn', 'true');
+        Lampa.Storage.set('online_mod_proxy_fancdn2', 'true');
+        Lampa.Storage.set('online_mod_proxy_fanserials', 'true');
+        Lampa.Storage.set('online_mod_proxy_fanserials_cdn', 'true');
+        Lampa.Storage.set('online_mod_proxy_animelib', 'true');
       } else if (!Lampa.Platform.is('android')) {
         Lampa.Storage.set('online_mod_proxy_lumex', 'true');
         Lampa.Storage.set('online_mod_proxy_cdnmovies', 'true');
@@ -16167,7 +16171,7 @@
         icon: "<svg height=\"260\" viewBox=\"0 0 244 260\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <path d=\"M242,88v170H10V88h41l-38,38h37.1l38-38h38.4l-38,38h38.4l38-38h38.3l-38,38H204L242,88L242,88z M228.9,2l8,37.7l0,0 L191.2,10L228.9,2z M160.6,56l-45.8-29.7l38-8.1l45.8,29.7L160.6,56z M84.5,72.1L38.8,42.4l38-8.1l45.8,29.7L84.5,72.1z M10,88 L2,50.2L47.8,80L10,88z\" fill=\"white\"/>\n        </svg>",
         name: Lampa.Lang.translate('online_mod_title_full')
       });
-      var show_all = Utils.isDebug();
+      var show_all = true;
       Balancers.forEach(function (s) {
         if (s.module.initSettings && !s.disabled) s.module.initSettings(show_all);
       });
